@@ -9,6 +9,7 @@ import {
   getLinkedPackageJSON,
   getAliases,
   getFilesRepo,
+  getPlugins,
 } from './utils';
 
 /**
@@ -17,7 +18,7 @@ import {
 export default function packagebind (babelConfig) {
   /** We are cloning babelrc here so we can mutate it directly to keep logic simpler */
   const cloneBabelrc = cloneDeep(babelConfig);
-  const { plugins = [] } = cloneBabelrc;
+  const plugins = getPlugins(cloneBabelrc);
 
   const moduleResolver = plugins.find(
     plugin => Array.isArray(plugin) && plugin[0] === 'module-resolver'
@@ -56,7 +57,9 @@ export default function packagebind (babelConfig) {
 
     // Add alias from linked babelConfig
     if (babelConfig) {
-      const aliases = getAliases(babelConfig.plugins);
+      const linkedPlugins = getPlugins(cloneBabelrc);
+      const aliases = getAliases(linkedPlugins);
+
       if (aliases) {
         aliasMaps[name] = Object.entries(aliases).reduce((updatedAliases, [key, value]) => {
           updatedAliases[key] = path.resolve(rootPath, value);
