@@ -55,7 +55,7 @@ export function getPlugins (babelConfig) {
 
   // add environment specific plugins
   if (babelConfig.env && babelConfig.env[babelEnv]) {
-    plugins = plugins.concat(babelConfig.env[babelEnv].plugins);
+    plugins = plugins.concat(babelConfig.env[babelEnv].plugins || []);
   }
 
   return plugins;
