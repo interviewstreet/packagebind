@@ -31,7 +31,7 @@ This is how we solve it.
 Inside `babel.config.js`
 
 ```js
-const packagebind = require('packagebind');
+const packagebind = require('packagebind').default;
 
 const babelConfig = {
   plugins: [
