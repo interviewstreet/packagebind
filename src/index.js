@@ -28,7 +28,7 @@ export default function packagebind (babelConfig) {
 
   const linkedRepos = Object.keys(aliases).filter((aliasKey) => {
     const aliasPath = path.resolve(aliases[aliasKey]);
-    return isFromCurrentRepo(aliasPath);
+    return !isFromCurrentRepo(aliasPath);
   });
 
   const linkedReposMeta = linkedRepos.map((name) => {
@@ -57,7 +57,7 @@ export default function packagebind (babelConfig) {
 
     // Add alias from linked babelConfig
     if (babelConfig) {
-      const linkedPlugins = getPlugins(cloneBabelrc);
+      const linkedPlugins = getPlugins(babelConfig);
       const aliases = getAliases(linkedPlugins);
 
       if (aliases) {
@@ -71,7 +71,10 @@ export default function packagebind (babelConfig) {
     // Add peer dependencies to aliasMaps to make sure the dependency conflict doesn't happens
     if (packageJSON.peerDependencies) {
       Object.keys(packageJSON.peerDependencies).forEach((module) => {
-        aliasMaps[name][module] = path.resolve(rootPath, 'node_modules', module);
+        // add peer dependency if its not present already from its babelConfig
+        if (!aliasMaps[name][module]) {
+          aliasMaps[name][module] = path.resolve(rootPath, 'node_modules', module);
+        }
       });
     }
   });
