@@ -3,5 +3,6 @@
     "targets": {
       "node": "8"
     }
-  }]]
+  }]],
+  "plugins": ["babel-plugin-add-module-exports"]
 }
