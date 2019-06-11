@@ -62,7 +62,8 @@ export default function packagebind (babelConfig) {
 
       if (aliases) {
         aliasMaps[name] = Object.entries(aliases).reduce((updatedAliases, [key, value]) => {
-          updatedAliases[key] = path.resolve(rootPath, value);
+          const modulePath = value.startsWith('.') ? '' : 'node_modules';
+          updatedAliases[key] = path.resolve(rootPath, modulePath, value);
           return updatedAliases;
         }, aliasMaps[name]);
       }
