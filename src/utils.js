@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'fs';
 import path from 'path';
-
+import { noop } from 'lodash';
+import * as babel from '@babel/core';
 /**
  * For a given path return if the path is from current repo or not
  */
@@ -84,4 +85,58 @@ export function getFilesRepo (filePath, linkedReposMeta) {
   }
 
   return linkedReposMeta.find(({ rootPath }) => filePath.startsWith(rootPath)).name;
+}
+
+/**
+ * Get all preset configs
+ */
+function safeRequire (path) {
+  try {
+    return require(path);
+  } catch (e) {
+    return undefined;
+  }
+}
+
+function gePresetConfig (preset, projectPath) {
+  if (typeof preset === 'string') {
+    // no need to add @babel namespaced presets
+    if (preset.startsWith('@babel')) return;
+
+    return safeRequire(`${projectPath}/node_modules/${preset}`) || // try requiring preset with presetName
+                   safeRequire(`${projectPath}/node_modules/babel-preset-${preset}`); // try requiring with babel-preset- prefix
+  } else if (Array.isArray(preset)) {
+    return gePresetConfig(preset[0]);
+  } else {
+    return preset;
+  }
+}
+
+// get babel configs from the preset
+export function getPresetAliases (projectPath, presets) {
+  let presetAliases = {};
+  /**
+   * We don't want to recurse on the preset of preset as most of the case
+   * resolveModules are on top level config or one common preset
+   */
+  if (Array.isArray(presets)) {
+    presets.forEach((preset) => {
+      let presetConfig = gePresetConfig(preset, projectPath);
+      const presetOption = Array.isArray(preset) ? preset[1] : {};
+
+      // if presetConfig is function call the function with babel and options
+      if (typeof presetConfig === 'function') {
+        // have fake value for assertVersion method as that check is not important
+        presetConfig = presetConfig({ ...babel, assertVersion: noop }, presetOption, projectPath);
+      }
+
+      const linkedPlugins = getPlugins(presetConfig);
+      const aliases = getAliases(linkedPlugins);
+
+      // push the preset config on all configs
+      presetAliases = { ...presetAliases, ...aliases };
+    });
+  }
+
+  return presetAliases;
 }

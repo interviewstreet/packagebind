@@ -10,6 +10,7 @@ import {
   getAliases,
   getFilesRepo,
   getPlugins,
+  getPresetAliases,
 } from './utils';
 
 /**
@@ -43,7 +44,7 @@ export default function packagebind (babelConfig) {
     };
   });
 
-  /** TODO: Add plugins from the linked packages as well.
+  /**
    * For now that is not required as the plugins added on this repo is super set of all plugin used on linked repos
    * For now just get the alias from those babel files
    * */
@@ -59,9 +60,11 @@ export default function packagebind (babelConfig) {
     if (babelConfig) {
       const linkedPlugins = getPlugins(babelConfig);
       const aliases = getAliases(linkedPlugins);
+      const presetAliases = getPresetAliases(rootPath, babelConfig.presets);
+      const allAliases = { ...presetAliases, ...aliases };
 
-      if (aliases) {
-        aliasMaps[name] = Object.entries(aliases).reduce((updatedAliases, [key, value]) => {
+      if (Object.keys(allAliases).length) {
+        aliasMaps[name] = Object.entries(allAliases).reduce((updatedAliases, [key, value]) => {
           const modulePath = value.startsWith('.') ? '' : 'node_modules';
           updatedAliases[key] = path.resolve(rootPath, modulePath, value);
           return updatedAliases;

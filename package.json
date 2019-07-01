@@ -1,6 +1,6 @@
 {
   "name": "packagebind",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Connect packages to your application with HMR and babel config",
   "main": "lib/index.js",
   "repository": "https://github.com/interviewstreet/packagebind.git",
