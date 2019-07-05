@@ -122,6 +122,9 @@ export function getPresetAliases (projectPath, presets) {
   if (Array.isArray(presets)) {
     presets.forEach((preset) => {
       let presetConfig = gePresetConfig(preset, projectPath);
+
+      if (!presetConfig) return;
+
       const presetOption = Array.isArray(preset) ? preset[1] : {};
 
       // if presetConfig is function call the function with babel and options
