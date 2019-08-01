@@ -1,6 +1,6 @@
 {
   "name": "packagebind",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Connect packages to your application with HMR and babel config",
   "main": "lib/index.js",
   "repository": "https://github.com/interviewstreet/packagebind.git",
@@ -13,7 +13,7 @@
     "babel-plugin-module-resolver": "3.2.0"
   },
   "dependencies": {
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",

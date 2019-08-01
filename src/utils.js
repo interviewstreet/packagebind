@@ -2,11 +2,13 @@ import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 import { noop } from 'lodash';
 import * as babel from '@babel/core';
+
+export const currentRepoDir = process.cwd();
+
 /**
  * For a given path return if the path is from current repo or not
  */
 export function isFromCurrentRepo (filePath) {
-  const currentRepoDir = process.cwd();
   return filePath.startsWith(currentRepoDir);
 }
 

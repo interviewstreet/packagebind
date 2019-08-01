@@ -11,6 +11,7 @@ import {
   getFilesRepo,
   getPlugins,
   getPresetAliases,
+  currentRepoDir,
 } from './utils';
 
 /**
@@ -75,9 +76,19 @@ export default function packagebind (babelConfig) {
     // Add peer dependencies to aliasMaps to make sure the dependency conflict doesn't happens
     if (packageJSON.peerDependencies) {
       Object.keys(packageJSON.peerDependencies).forEach((module) => {
-        // add peer dependency if its not present already from its babelConfig
-        if (!aliasMaps[name][module]) {
-          aliasMaps[name][module] = path.resolve(rootPath, 'node_modules', module);
+        const aliasObj = aliasMaps[name];
+        const aliasPath = aliasObj[module];
+        /**
+         * Peer dependency should always point to the main repo,
+         * If peer dependency is defined and its pointing to node modules
+         * we should replace the module to point the main repos modules
+         * If its not defined add peer dependency to alias and point it
+         * to main repo module.
+         */
+        if (aliasPath && aliasPath.startsWith(module)) {
+          aliasObj[module] = aliasPath.replace(module, currentRepoDir);
+        } else if (!aliasPath) {
+          aliasObj[module] = path.resolve(currentRepoDir, 'node_modules', module);
         }
       });
     }
