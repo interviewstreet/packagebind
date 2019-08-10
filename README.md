@@ -46,3 +46,7 @@ const babelConfig = {
 module.exports = packagebind(babelConfig);
 ```
 
+## Dependency
+- babel-plugin-module-resolver (For providing alias)
+- babel7 (Aliasing doesn't work correctly with babel6)
+
