@@ -17,7 +17,7 @@ module.exports = {
   plugins: [
     ["module-resolver", {
       alias: {
-        "my-design-kit": "../my-design-kit", // root path of my-design-kit package code
+        "my-design-kit": "../my-design-kit/src", // local path to package source files,
       }
     }]
   ]
@@ -37,7 +37,7 @@ const babelConfig = {
   plugins: [
     ["module-resolver", {
       alias: {
-        "my-design-kit": "../my-design-kit", // root path of my-design-kit package code
+        "my-design-kit": "../my-design-kit/src", // local path to package source files
       }
     }]
   ]
