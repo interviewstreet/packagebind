@@ -85,8 +85,11 @@ export default function packagebind (babelConfig) {
          * If its not defined add peer dependency to alias and point it
          * to main repo module.
          */
-        if (aliasPath && aliasPath.startsWith(module)) {
-          aliasObj[module] = aliasPath.replace(module, currentRepoDir);
+
+        const repoModulePath = path.resolve(rootPath, 'node_modules', module);
+
+        if (aliasPath && aliasPath.startsWith(repoModulePath)) {
+          aliasObj[module] = aliasPath.replace(rootPath, currentRepoDir);
         } else if (!aliasPath) {
           aliasObj[module] = path.resolve(currentRepoDir, 'node_modules', module);
         }
