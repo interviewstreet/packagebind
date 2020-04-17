@@ -50,3 +50,6 @@ module.exports = packagebind(babelConfig);
 - babel-plugin-module-resolver (For providing alias)
 - babel7 (Aliasing doesn't work correctly with babel6)
 
+## Making this work with CRA
+- Will add this on readme, meanwhile you can follow this thread.
+https://github.com/interviewstreet/packagebind/issues/4#issuecomment-524563118 
