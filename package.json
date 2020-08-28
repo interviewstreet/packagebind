@@ -13,7 +13,7 @@
     "babel-plugin-module-resolver": "3.2.0"
   },
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.17"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.0",
